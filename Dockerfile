@@ -38,7 +38,11 @@ RUN apk update && apk add --no-cache \
 # Create a non-root user
 RUN adduser -D -u 1000 alpine && \
     mkdir -p ${HOME} && \
-    chown -R alpine:alpine ${HOME}
+    mkdir -p ${HOME}/.config && \
+    mkdir -p ${HOME}/.vnc && \
+    mkdir -p /var/log && \
+    chown -R alpine:alpine ${HOME} && \
+    chmod 755 ${HOME}
 
 # Set up noVNC
 WORKDIR /opt

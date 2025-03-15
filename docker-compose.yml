@@ -6,14 +6,25 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: chromium-novnc
-    environment:
-      - VNC_PASSWORD=${VNC_PASSWORD:-password}
-      - VNC_RESOLUTION=1920x1080
-    ports:
-      - "7171:6080"
     restart: unless-stopped
+    environment:
+      - VNC_RESOLUTION=1920x1080
+      - VNC_DPI=96
+      - VNC_PASSWORD=password
+      - TZ=Europe/Istanbul
+    ports:
+      - "5900:5900"  # VNC port
+      - "6080:6080"  # noVNC HTTP port
     volumes:
-      - chromium_data:/home/alpine/.config/chromium
+      - /datapool/config/chromium-config:/home/alpine/.config/chromium
+    networks:
+      - proxy-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-volumes:
-  chromium_data:
+networks:
+  proxy-net:
+    external: true
