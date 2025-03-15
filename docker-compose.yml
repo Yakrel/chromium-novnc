@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  chromium-novnc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chromium-novnc
+    environment:
+      - VNC_PASSWORD=${VNC_PASSWORD:-password}
+      - VNC_RESOLUTION=1920x1080
+    ports:
+      - "7171:6080"
+    restart: unless-stopped
+    volumes:
+      - chromium_data:/home/alpine/.config/chromium
+
+volumes:
+  chromium_data:
